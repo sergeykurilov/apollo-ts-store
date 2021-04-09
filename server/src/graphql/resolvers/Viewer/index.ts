@@ -1,0 +1,1 @@
+import { IResolvers } from "apollo-server-express"export const viewResolvers: IResolvers =  {    Query: {        authUrl: () => {            return "authUrl.authUrl"        }    },    Mutation: {        logIn: () => {            return "Mutation.logIn"        },        logOut: () => {            return "Mutation.logOut"        }    }}
