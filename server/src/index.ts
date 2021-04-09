@@ -18,7 +18,7 @@ const mount = async (app: Application) => {
     }),
   });
   server.applyMiddleware({ app, path: "/api" });
-
+//tiny
   app.listen(process.env.PORT);
 
   console.log(`[app] : http://localhost:${process.env.PORT}`);
