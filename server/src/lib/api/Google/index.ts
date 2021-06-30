@@ -1,18 +1,30 @@
 require("dotenv").config();
-const {google} = require('googleapis');
+import { google } from "googleapis";
 
-const oauth2Client = new google.auth.OAuth2(
+const auth = new google.auth.OAuth2(
     process.env.G_CLIENT_ID,
     process.env.G_CLIENT_SECRET,
     `${process.env.PUBLIC_URL}/login`
 );
 
+export const Google = {
+    authUrl: auth.generateAuthUrl({
+        access_type: "online",
+        scope: [
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile"
+        ]
+    }),
+    logIn: async (code: string) => {
+        const { tokens } = await auth.getToken(code);
 
-export const Google = () => {
+        auth.setCredentials(tokens);
 
-    const scopes = [
-        'https://www.googleapis.com/auth/blogger',
-        'https://www.googleapis.com/auth/calendar'
-    ];
+        const { data } = await google.people({ version: "v1", auth }).people.get({
+            resourceName: "people/me",
+            personFields: "emailAddresses,names,photos"
+        });
 
-}
+        return { user: data };
+    }
+};
